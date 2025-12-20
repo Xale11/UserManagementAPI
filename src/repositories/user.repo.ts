@@ -3,15 +3,24 @@ import type { UserResponseDto } from "../dto/userResponse.dto.js"
 import { v4 as uuidv4 } from "uuid"
 
 export class UserRepository {
-    createUser = async (user: CreateUserRequestDto): Promise<UserResponseDto> => {
+
+    // in-memory store
+
+    private users: UserResponseDto[] = []
+
+    public createUser = async (user: CreateUserRequestDto): Promise<UserResponseDto | void> => {
+        const newUser: UserResponseDto = {
+            createdAt: Date.now().toString(),
+            email: user.email,
+            name: user.name,
+            id: uuidv4()
+        }
+
+        this.users.push(newUser)
+
         return new Promise((resolve) => {
             setTimeout(() => {
-                resolve({
-                    createdAt: Date.now().toString(),
-                    email: user.email,
-                    name: user.name,
-                    id: uuidv4()
-                })
+                resolve(newUser)
             }, 500)
         })
     }
