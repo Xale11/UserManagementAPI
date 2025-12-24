@@ -3,7 +3,7 @@ import type { ZodObject } from "zod";
 import { HttpStatusCode } from "../constants/httpStatusCodes.js";
 import { ZodError } from "zod";
 
-export const validate = ( schemaBody?: ZodObject, schemaParams?: ZodObject, schemaQuery?: ZodObject ) => ( req: Request, res: Response, next: NextFunction ) => {
+export const validate = ( schemaBody?: ZodObject | null, schemaParams?: ZodObject | null, schemaQuery?: ZodObject | null ) => ( req: Request, res: Response, next: NextFunction ) => {
     try {
         if (schemaBody) {
         schemaBody.parse(req.body);
@@ -23,7 +23,7 @@ export const validate = ( schemaBody?: ZodObject, schemaParams?: ZodObject, sche
         if (err instanceof ZodError){
             res.status(HttpStatusCode.BAD_REQUEST).json({
                 message: "Validation failed",
-                errors: err
+                errors: err.message
             })
         }
 
