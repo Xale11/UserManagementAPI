@@ -14,12 +14,11 @@ export class UserService {
         return newUser
     } 
 
-    getUsers = async (): Promise<UserResponseDto[]> => {
-        const users = await this.userRepo.getUsers()
+    getUsers = async (page: number = 1, limit: number = 10): Promise<UserResponseDto[]> => {
+        const users = await this.userRepo.getUsers(page, limit)
         if (!users) {
             throw new Error('Failed to fetch users')
         }
-        throw new Error('Failed to fetch users')
-        // return users
+        return users
     }
 }

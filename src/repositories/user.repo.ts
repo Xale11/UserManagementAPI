@@ -1,10 +1,11 @@
 import type { CreateUserRequestDto } from "../dto/createUserRequest.dto.js"
 import type { UserResponseDto } from "../dto/userResponse.dto.js"
 import { v4 as uuidv4 } from "uuid"
+import { testUsers } from "../constants/testUsers.js"
 
 export class UserRepository {
 
-    private users: UserResponseDto[] = []
+    private users: UserResponseDto[] = testUsers
 
     public createUser = async (user: CreateUserRequestDto): Promise<UserResponseDto | void> => {
         const newUser: UserResponseDto = {
@@ -23,10 +24,12 @@ export class UserRepository {
         })
     }
 
-    public getUsers = async (): Promise<UserResponseDto[] | void> => {
+    public getUsers = async (page: number = 1, limit: number = 10): Promise<UserResponseDto[] | void> => {
+        const rangeStart = (page - 1) * limit
+        const rangeEnd = (page * limit)
         return new Promise((resolve) => {
             setTimeout(() => {
-                resolve(this.users)
+                resolve(this.users.slice(rangeStart, rangeEnd))
             }, 500)
         })
     }
