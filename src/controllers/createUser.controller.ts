@@ -10,6 +10,7 @@ export const createUserController = async (req: Request, res: Response, next: Ne
     }
 
     const userService = new UserService()
-
-    return await userService.createUser(data)
+    const newUser = await userService.createUser(data)
+    
+    res.status(201).json(newUser)
 }
