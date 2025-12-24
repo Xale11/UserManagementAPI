@@ -9,8 +9,17 @@ export class UserService {
     createUser = async (user: CreateUserRequestDto): Promise<UserResponseDto> => {
         const newUser = await this.userRepo.createUser(user)
         if (!newUser) {
-            throw Error('Failed to create new user')
+            throw new Error('Failed to create new user')
         }
         return newUser
     } 
+
+    getUsers = async (): Promise<UserResponseDto[]> => {
+        const users = await this.userRepo.getUsers()
+        if (!users) {
+            throw new Error('Failed to fetch users')
+        }
+        throw new Error('Failed to fetch users')
+        // return users
+    }
 }
