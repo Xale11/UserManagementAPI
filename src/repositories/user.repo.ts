@@ -4,8 +4,6 @@ import { v4 as uuidv4 } from "uuid"
 
 export class UserRepository {
 
-    // in-memory store
-
     private users: UserResponseDto[] = []
 
     public createUser = async (user: CreateUserRequestDto): Promise<UserResponseDto | void> => {
@@ -21,6 +19,14 @@ export class UserRepository {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(newUser)
+            }, 500)
+        })
+    }
+
+    public getUsers = async (): Promise<UserResponseDto[] | void> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(this.users)
             }, 500)
         })
     }
