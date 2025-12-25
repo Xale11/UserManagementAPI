@@ -23,7 +23,7 @@ export const validate = ( schemaBody?: ZodObject | null, schemaParams?: ZodObjec
         if (err instanceof ZodError){
             res.status(HttpStatusCode.BAD_REQUEST).json({
                 message: "Validation failed",
-                errors: err.message
+                errors: err.issues
             })
         }
 
