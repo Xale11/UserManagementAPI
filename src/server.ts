@@ -1,7 +1,8 @@
 import app from "./app.js"
+import config from "./config/config.js"
 
 const startServer = () => {
-    app.listen(3000, () => console.log("Listening on port 3000"))
+    app.listen(config.port, () => console.log(`Listening on port ${config.port}`))
 }
 
 startServer();
