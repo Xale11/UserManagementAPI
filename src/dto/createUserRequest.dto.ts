@@ -1,8 +1,8 @@
-import type { UserRoles } from "../constants/userRoles.js";
+import type { UserRole } from "../constants/userRoles.js";
 
 export interface CreateUserRequestDto {
     name: string;
     email: string;
     password: string;
-    role: UserRoles;
+    role: UserRole;
 }

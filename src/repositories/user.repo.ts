@@ -1,18 +1,35 @@
 import type { CreateUserRequestDto } from "../dto/createUserRequest.dto.js"
 import type { UserResponseDto } from "../dto/userResponse.dto.js"
-import { v4 as uuidv4 } from "uuid"
-import { testUsers } from "../constants/testUsers.js"
 import { db } from "../database/pgClient.js"
-import type { QueryResult } from "pg"
+import { roleToRoleIdMap } from "../constants/userRoles.js"
 
 export class UserRepository {
 
-    private users: UserResponseDto[] = testUsers
-
     public createUser = async (user: CreateUserRequestDto): Promise<UserResponseDto | void> => {
         const client = await db.connect()
+
+        const roleId = roleToRoleIdMap[user.role]
+
+        const createUserQuery = `
+            WITH new_user as (
+                INSERT INTO users (name, email, password)
+                VALUES ($1, $2, $3)
+                RETURNING id, name, email, password, created_at
+            ),
+            insert_role as (
+                INSERT INTO user_roles (user_id, role_id)
+                SELECT id, $4
+                FROM new_user
+            )
+            SELECT nu.id, nu.name, nu.email, nu.password, nu.created_at $5 AS role
+            FROM new_user nu;
+        `;
+
         try {
-            const data = await client.query('INSERT INTO users (')
+            const data = await client.query<UserResponseDto>(createUserQuery,
+                [user.name, user.email, user.password, roleId, user.role]
+            )
+            return data.rows[0]
         } finally {
             client.release()
         }
