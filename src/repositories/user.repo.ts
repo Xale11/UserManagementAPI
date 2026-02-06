@@ -21,7 +21,7 @@ export class UserRepository {
                 SELECT id, $4
                 FROM new_user
             )
-            SELECT nu.id, nu.name, nu.email, nu.password, nu.created_at $5 AS role
+            SELECT nu.id, nu.name, nu.email, nu.password, nu.created_at, $5 AS role
             FROM new_user nu;
         `;
 
@@ -40,6 +40,16 @@ export class UserRepository {
     public getUsers = async (page: number = 1, limit: number = 10): Promise<UserResponseDto[] | void> => {
         const offset = (page - 1) * limit;
         const client = await db.connect()
+
+        const getUsersQuery = `
+            WITH users AS (
+                SELECT * FROM users
+                ORDER BY id
+                LIMIT $1 OFFSET $2
+                RETURNING id, name, email, password, created_at
+            ),
+            
+        `;
 
         try {
             const data = await client.query<UserResponseDto>(

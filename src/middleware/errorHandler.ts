@@ -14,7 +14,7 @@ class ErrorHandler {
     }
 }
 
-const errorHandler = new ErrorHandler()
+export const errorHandler = new ErrorHandler()
 
 export const errorMiddleware: ErrorRequestHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (!errorHandler.isTrustedError(err)){
